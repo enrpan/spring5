@@ -1,0 +1,16 @@
+package com.bolsadeideas.springboot.backend.apirest.controllers;
+
+import java.util.List;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.bolsadeideas.springboot.backend.apirest.models.entity.Cliente;
+
+@RestController
+@RequestMapping("/api")
+public class ClienteRestController {
+	
+	public List<Cliente> index();
+
+}
