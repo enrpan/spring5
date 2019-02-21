@@ -6,5 +6,5 @@ spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
 # spring.jpa.hibernate.ddl-auto=create-drop -> crea las tablas al arrancar y las borra al finalizar. En un entorno de producción deberia ser "none" (tablas creadas antes de ejecutar)
 spring.jpa.hibernate.ddl-auto=create-drop
 logging.level.org.hibernate.SQL=DEBUG
-
+#logging.level.org.org.hibernate.sql=debug
 
