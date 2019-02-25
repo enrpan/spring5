@@ -1,5 +1,5 @@
 .footer {
-  position: absolute;
+  /* position: absolute; -- Tengo que quitar esto porque, si no, no se queda en el fondo el footer */
   bottom: 0px;
   height: 60px;
   width: 100%;
