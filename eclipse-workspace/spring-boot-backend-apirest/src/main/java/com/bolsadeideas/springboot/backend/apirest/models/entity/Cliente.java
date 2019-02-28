@@ -24,8 +24,13 @@ public class Cliente implements Serializable {
 	// Para estos tres siguientes datos no se usa @Column porque el atributo tiene
 	// el mismo nombre que el campo de BD. Se puede usar también para indicar 
 	// caracteristicas como el tamaño, si es nullable, etc...
+	
+	@Column(nullable=false)
 	private String nombre;
+	
 	private String apellido;
+	
+	@Column(nullable=false, unique=true)
 	private String email;
 	
 	@Column(name="create_at")
