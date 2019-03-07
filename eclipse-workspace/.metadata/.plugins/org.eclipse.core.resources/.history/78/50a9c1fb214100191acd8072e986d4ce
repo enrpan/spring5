@@ -110,7 +110,7 @@ public class ClienteRestController {
 	}
 	
 	@PutMapping("/clientes/{id}")
-	public ResponseEntity<?> update(@Valid @RequestBody Cliente cliente, BindingResult result, @PathVariable Long id) {
+	public ResponseEntity<?> update(@Valid RequestBody Cliente cliente, BindingResult result, @PathVariable Long id) {
 		
 		Cliente clienteActual = clienteService.findById(id);
 		
@@ -118,6 +118,12 @@ public class ClienteRestController {
 		Map<String, Object> response = new HashMap<>();
 		
 		if ( result.hasErrors() ) {
+			/* List<String> errors = new ArrayList<>();
+			
+			for (FieldError err : result.getFieldErrors()) {
+				errors.add("El campo '" + err.getField() + "' " + err.getDefaultMessage());
+			}*/
+			// Esto equivale en Java 1.8 a lo comentado arriba
 			List<String> errors = result.getFieldErrors()
 					.stream()
 					.map(err -> {

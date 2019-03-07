@@ -28,16 +28,16 @@ public class Cliente implements Serializable {
 	// el mismo nombre que el campo de BD. Se puede usar también para indicar 
 	// caracteristicas como el tamaño, si es nullable, etc...
 	
-	@NotEmpty(message = "no puede ser vacio")
-	@Size(min=4, max=12, message="el tamaño tiene que ser entre 4 y 12")
+	@NotEmpty
+	@Size(min=4, max=12)
 	@Column(nullable=false)
 	private String nombre;
 	
-	@NotEmpty(message = "no puede ser vacio")
+	@NotEmpty
 	private String apellido;
 	
-	@NotEmpty(message = "no puede ser vacio")
-	@Email(message = "no es una dirección de correo bien formada")
+	@NotEmpty
+	@Email
 	@Column(nullable=false, unique=true)
 	private String email;
 	

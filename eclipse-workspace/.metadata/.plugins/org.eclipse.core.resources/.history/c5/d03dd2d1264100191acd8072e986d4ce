@@ -29,7 +29,7 @@ public class Cliente implements Serializable {
 	// caracteristicas como el tamaño, si es nullable, etc...
 	
 	@NotEmpty(message = "no puede ser vacio")
-	@Size(min=4, max=12, message="el tamaño tiene que ser entre 4 y 12")
+	@Size(min=4, max=12)
 	@Column(nullable=false)
 	private String nombre;
 	
@@ -37,7 +37,7 @@ public class Cliente implements Serializable {
 	private String apellido;
 	
 	@NotEmpty(message = "no puede ser vacio")
-	@Email(message = "no es una dirección de correo bien formada")
+	@Email
 	@Column(nullable=false, unique=true)
 	private String email;
 	
