@@ -4,7 +4,7 @@ import { CLIENTES } from './clientes.json';
 import { Cliente } from './cliente';
 import { of, Observable, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, tap } from 'rxjs/operators';
 import swal from 'sweetalert2';
 import { Router } from '@angular/router';
 
@@ -31,16 +31,33 @@ export class ClienteService {
     //);
     // Que de forma resumida se puede escribir también como:
     return this.http.get(this.urlEndPoint).pipe(
+      tap( response => {
+        let clientes = response as Cliente[];  // Hay que convertir el response a tipo Cliente porque el response es un Object
+        console.log('ClienteService: tap 1');
+        clientes.forEach( cliente => {
+          console.log(cliente.nombre);
+        }
+        )
+      }),
       map( response => {
         let clientes = response as Cliente[];
         return clientes.map( cliente => {
           cliente.nombre = cliente.nombre.toUpperCase();
-          let datePipe = new DatePipe('en-US');
-          cliente.createAt = datePipe.transform(cliente.createAt, 'dd/MM/yyyy');
+          let datePipe = new DatePipe('es');
+          // Esto de abajo es para formatear la fecha aqui en la clase service en lugar de en la vista
+          //cliente.createAt = datePipe.transform(cliente.createAt, 'EEEE dd, MMMM yyyy');
           // Esto de abajo es otra forma de hacer lo mismo que con el DatePipe
           //cliente.createAt = formatDate(cliente.createAt, 'dd-MM-yyyy', 'en-US');
-          return cliente;
+          return cliente;  // el map devuelve un tipo cliente ya
         });
+      }),
+      tap( response => {
+        //let clientes = response as Cliente[];  --> Ya no es necesaria la conversión porque el map anterior ha devuelto ya un tipo Cliente
+        console.log('ClienteService: tap 2');
+        response.forEach( cliente => {
+          console.log(cliente.nombre);
+        }
+        )
       })
     );
   }

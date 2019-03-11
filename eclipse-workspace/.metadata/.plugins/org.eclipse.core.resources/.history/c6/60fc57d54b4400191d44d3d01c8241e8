@@ -1,14 +1,20 @@
 package com.bolsadeideas.springboot.backend.apirest.controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,10 +71,30 @@ public class ClienteRestController {
 	//@ResponseStatus(HttpStatus.CREATED)  
 	// Cambia a 201 el valor de retorno del HTTP en caso de que todo vaya bien
 	// Como se manejan diferentes errores dentro, hay que quitarlo ya que el error devuelto puede variar
-	public ResponseEntity<?> create(@RequestBody Cliente cliente) {
+	// El @Valid es para que se apliquen las validaciones de los datos definidas en la clase Entity (Cliente.java)
+	// El BindingResult es donde llegan los resultados de las validaciones de los datos
+	public ResponseEntity<?> create(@Valid @RequestBody Cliente cliente, BindingResult result) {
 		
 		Cliente clienteNew = null;
 		Map<String, Object> response = new HashMap<>();
+		
+		if ( result.hasErrors() ) {
+			/* List<String> errors = new ArrayList<>();
+			
+			for (FieldError err : result.getFieldErrors()) {
+				errors.add("El campo '" + err.getField() + "' " + err.getDefaultMessage());
+			}*/
+			// Esto equivale en Java 1.8 a lo comentado arriba
+			List<String> errors = result.getFieldErrors()
+					.stream()
+					.map(err -> {
+						return "El campo '" + err.getField() + "' " + err.getDefaultMessage();
+						})
+					.collect(Collectors.toList());
+			
+			response.put("errors", errors);
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+		}
 		
 		try {
 			clienteNew = clienteService.save(cliente);
@@ -84,14 +110,26 @@ public class ClienteRestController {
 	}
 	
 	@PutMapping("/clientes/{id}")
-	public ResponseEntity<?> update(@RequestBody Cliente cliente, @PathVariable Long id) {
+	public ResponseEntity<?> update(@Valid @RequestBody Cliente cliente, BindingResult result, @PathVariable Long id) {
 		
 		Cliente clienteActual = clienteService.findById(id);
 		
 		Cliente clienteUpdated = null;
 		Map<String, Object> response = new HashMap<>();
 		
-		if ( cliente==null ) {
+		if ( result.hasErrors() ) {
+			List<String> errors = result.getFieldErrors()
+					.stream()
+					.map(err -> {
+						return "El campo '" + err.getField() + "' " + err.getDefaultMessage();
+						})
+					.collect(Collectors.toList());
+			
+			response.put("errors", errors);
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+		}
+		
+		if ( clienteActual==null ) {
 			response.put("mensaje", "Error: NO se pudo editar. El cliente con ID: ".concat(id.toString()).concat(" no existe en BD!"));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
@@ -100,6 +138,7 @@ public class ClienteRestController {
 			clienteActual.setApellido(cliente.getApellido());
 			clienteActual.setNombre(cliente.getNombre());
 			clienteActual.setEmail(cliente.getEmail());
+			clienteActual.setCreateAt(cliente.getCreateAt());
 			
 			clienteUpdated = clienteService.save(clienteActual);
 		} catch (DataAccessException e) {
@@ -114,9 +153,20 @@ public class ClienteRestController {
 	}
 	
 	@DeleteMapping("/clientes/{id}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void delete(@PathVariable Long id) {
-		clienteService.delete(id);
+	public ResponseEntity<?> delete(@PathVariable Long id) {
+		
+		Map<String, Object> response = new HashMap<>();
+		
+		try {
+			clienteService.delete(id);
+		} catch (DataAccessException e) {
+			response.put("mensaje", "Error al borrar en BD!");
+			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		response.put("mensaje", "El cliente ha sido borrado con éxito!");
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK); 
 	}
 
 }
