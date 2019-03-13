@@ -3,6 +3,7 @@ import { Cliente } from './cliente';
 import { ClienteService } from './cliente.service';
 import swal from 'sweetalert2';
 import { tap } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -13,27 +14,27 @@ export class ClientesComponent implements OnInit {
 
   clientes: Cliente[];
 
-  constructor(private clienteService: ClienteService) { }
+  constructor(private clienteService: ClienteService, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
-    this.clienteService.getClientes().pipe(
-      tap( clientes => {
-        console.log('ClienteComponent: tap 3');
-        clientes.forEach( cliente => {
-          console.log(cliente.nombre);
-        });
-      })
-    ).subscribe(
-      (clientes) => { this.clientes = clientes }
-      // Al ser un único parametro y una unica linea de funcion se podria poner:
-      // clientes => this.clientes = clientes
-      // Si los () y sin las {}
-    );
-
-    // Esto es lo mismo que lo de arriba pero sin la forma abreviada
-    //this.clienteService.getClientes().subscribe(
-    //  function (clientes) { this.clientes = clientes }
-    //);
+    this.activatedRoute.paramMap.subscribe ( params => {
+      let page: number = +params.get('page');  // El + indica que se convierta el string a un integer
+      if ( !page ) { page = 0; } // Para la primera página en la que page no está definido
+      
+      this.clienteService.getClientes(page).pipe(
+        tap( response => {
+          console.log('ClienteComponent: tap 3');
+          (response.content as Cliente[]).forEach( cliente => {
+            console.log(cliente.nombre);
+          });
+        })
+      ).subscribe(
+        (response) => { this.clientes = response.content as Cliente[] }
+        // Al ser un único parametro y una unica linea de funcion se podria poner:
+        // clientes => this.clientes = clientes
+        // Si los () y sin las {}
+      );
+    });
   }
 
   delete(cliente: Cliente): void {

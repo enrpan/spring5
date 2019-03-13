@@ -19,7 +19,7 @@ export class ClienteService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
-  getClientes(): Observable<Cliente[]> {
+  getClientes(page: number): Observable<any> {
     //return of(CLIENTES);
 
     // Una forma de hacerlo...
@@ -30,18 +30,18 @@ export class ClienteService {
     //  map( function(response) { return response as Cliente[]} )
     //);
     // Que de forma resumida se puede escribir también como:
-    return this.http.get(this.urlEndPoint).pipe(
-      tap( response => {
-        let clientes = response as Cliente[];  // Hay que convertir el response a tipo Cliente porque el response es un Object
+    return this.http.get(this.urlEndPoint + '/page/' + page).pipe(
+      tap( (response: any) => {
+        //let clientes = response as Cliente[];  // Hay que convertir el response a tipo Cliente porque el response es un Object
         console.log('ClienteService: tap 1');
-        clientes.forEach( cliente => {
+        (response.content as Cliente[]).forEach( cliente => {
           console.log(cliente.nombre);
         }
         )
       }),
-      map( response => {
-        let clientes = response as Cliente[];
-        return clientes.map( cliente => {
+      map( (response: any) => {
+        //let clientes = response as Cliente[];
+        (response.content as Cliente[]).map( cliente => {
           cliente.nombre = cliente.nombre.toUpperCase();
           let datePipe = new DatePipe('es');
           // Esto de abajo es para formatear la fecha aqui en la clase service en lugar de en la vista
@@ -50,11 +50,12 @@ export class ClienteService {
           //cliente.createAt = formatDate(cliente.createAt, 'dd-MM-yyyy', 'en-US');
           return cliente;  // el map devuelve un tipo cliente ya
         });
+        return response;
       }),
       tap( response => {
         //let clientes = response as Cliente[];  --> Ya no es necesaria la conversión porque el map anterior ha devuelto ya un tipo Cliente
         console.log('ClienteService: tap 2');
-        response.forEach( cliente => {
+        (response.content as Cliente[]).forEach( cliente => {
           console.log(cliente.nombre);
         }
         )
