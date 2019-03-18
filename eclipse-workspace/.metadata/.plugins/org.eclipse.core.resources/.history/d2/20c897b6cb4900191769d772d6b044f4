@@ -49,10 +49,10 @@ public class Cliente implements Serializable {
 	
 	// El metodo PrePersist es propio de los @Entity y se ejecuta justo antes
 	// de hacer persistente (de guardar) el objeto.
-	//@PrePersist
-	//public void prePersist() {
-	//	createAt = new Date();
-	//}
+	@PrePersist
+	public void prePersist() {
+		createAt = new Date();
+	}
 
 	public Long getId() {
 		return id;
