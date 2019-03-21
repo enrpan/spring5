@@ -47,6 +47,8 @@ public class Cliente implements Serializable {
 	@Temporal(TemporalType.DATE)  // Tipo de fecha: date, timestamp, ...
 	private Date createAt;
 	
+	private String foto;
+	
 	// El metodo PrePersist es propio de los @Entity y se ejecuta justo antes
 	// de hacer persistente (de guardar) el objeto.
 	//@PrePersist
@@ -93,6 +95,16 @@ public class Cliente implements Serializable {
 	public void setCreateAt(Date createAt) {
 		this.createAt = createAt;
 	}
+	
+	public String getFoto() {
+		return foto;
+	}
+
+	public void setFoto(String foto) {
+		this.foto = foto;
+	}
+
+
 
 	/**
 	 * 
