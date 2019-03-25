@@ -217,7 +217,7 @@ public class ClienteRestController {
 			String nombreArchivo = UUID.randomUUID().toString() + "_" + archivo.getOriginalFilename().replace(" ", "");
 			Path rutaArchivo = Paths.get("uploads").resolve(nombreArchivo).toAbsolutePath();
 			
-			log.info(rutaArchivo.toString());
+			//log.info(rutaArchivo.toString());
 			
 			try {
 				Files.copy(archivo.getInputStream(), rutaArchivo);
