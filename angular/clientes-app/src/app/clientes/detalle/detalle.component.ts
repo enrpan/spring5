@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Cliente } from '../cliente';
 import { ClienteService } from '../cliente.service';
+import { ModalService } from './modal.service';
 import { ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert2';
 import { HttpEventType } from '@angular/common/http';
@@ -11,22 +12,25 @@ import { HttpEventType } from '@angular/common/http';
   styleUrls: ['./detalle.component.css']
 })
 export class DetalleComponent implements OnInit {
-  cliente: Cliente;
+  @Input() cliente: Cliente;
   titulo: string = "Detalle del cliente";
   private fotoSeleccionada: File;
   progreso: number = 0;
 
-  constructor(private clienteService: ClienteService, private activatedRoute: ActivatedRoute) { }
+  constructor(private clienteService: ClienteService,
+    private modalService: ModalService) { }
+    // private activatedRoute: ActivatedRoute) { } Esto solo sera necesario cuando no era una pantalla modal
 
   ngOnInit() {
-    this.activatedRoute.paramMap.subscribe(params => {
-      let id:number = +params.get('id');  // El + es para convertir a numero
-      if ( id ) {
-        this.clienteService.getCliente(id).subscribe(cliente => {
-          this.cliente = cliente;
-        });
-      }
-    });
+    //Este contenido era para cuando esto no se mostraba como un dialogo modal
+    //this.activatedRoute.paramMap.subscribe(params => {
+    //  let id:number = +params.get('id');  // El + es para convertir a numero
+    //  if ( id ) {
+    //    this.clienteService.getCliente(id).subscribe(cliente => {
+    //      this.cliente = cliente;
+    //    });
+    //  }
+    //});
   }
 
   seleccionarFoto(event) {
@@ -54,6 +58,12 @@ export class DetalleComponent implements OnInit {
         }
       });
     }
+  }
+
+  cerrarModal() {
+    this.modalService.cerrarModal();
+    this.fotoSeleccionada = null;
+    this.progreso = 0;
   }
 
 }
