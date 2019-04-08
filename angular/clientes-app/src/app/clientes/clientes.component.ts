@@ -43,6 +43,16 @@ export class ClientesComponent implements OnInit {
         // Si los () y sin las {}
       );
     });
+
+    this.modalService.notificarUpload.subscribe( cliente => {
+      this.clientes = this.clientes.map( clienteOriginal => {
+        if ( cliente.id == clienteOriginal.id ) {
+          clienteOriginal.foto = cliente.foto;
+        }
+        return clienteOriginal;
+      })
+    });
+
   }
 
   delete(cliente: Cliente): void {
