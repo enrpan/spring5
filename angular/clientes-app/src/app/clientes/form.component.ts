@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Cliente } from './cliente';
+import { Region } from './region';
 import { ClienteService } from './cliente.service'
 import { Router, ActivatedRoute } from '@angular/router'
 import swal from 'sweetalert2'
@@ -11,6 +12,7 @@ import swal from 'sweetalert2'
 export class FormComponent implements OnInit {
 
   private cliente: Cliente = new Cliente()
+  regiones: Region[];
   private titulo: string = "Crear Cliente"
   private errores: string[];
 
@@ -29,10 +31,13 @@ export class FormComponent implements OnInit {
       if (id) {
         this.clienteService.getCliente(id).subscribe( (cliente) => this.cliente = cliente )
       }
-    })
+    });
+
+    this.clienteService.getRegiones().subscribe(regiones => this.regiones = regiones);
   }
 
   create(): void {
+    console.log(this.cliente);
     this.clienteService.create(this.cliente).subscribe(
       cliente => {
         this.router.navigate(['/clientes'])
@@ -47,6 +52,7 @@ export class FormComponent implements OnInit {
   }
 
   update(): void {
+    console.log(this.cliente);
     this.clienteService.update(this.cliente).subscribe(
       json => { // en este caso estamos usando el json tal cual lo devuelve el servidor
         this.router.navigate(['/clientes'])
@@ -58,6 +64,14 @@ export class FormComponent implements OnInit {
         console.error(err.error.errors);
       }
     )
+  }
+
+  compararRegion(o1:Region, o2:Region): boolean {
+    if (o1===undefined && o2===undefined) {
+      return true;
+    }
+    //return o1==null || o2==null? false: o1.id===o2.id;
+    return o1===null || o2===null || o1===undefined || o2===undefined? false: o1.id===o2.id;
   }
 
 }
