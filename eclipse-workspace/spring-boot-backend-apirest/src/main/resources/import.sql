@@ -21,5 +21,17 @@ INSERT INTO clientes (region_id, nombre, apellido, email, create_at) VALUES(5, '
 INSERT INTO clientes (region_id, nombre, apellido, email, create_at) VALUES(6, 'Username13', 'Apellido13', 'user13@gmail.com', '2018-01-13');
 INSERT INTO clientes (region_id, nombre, apellido, email, create_at) VALUES(2, 'Username14', 'Apellido14', 'user14@gmail.com', '2018-01-14');
 
+/* Usuarios con sus roles */
+/* Las passwords son 12345 encriptadas con BCrypt */
+INSERT INTO usuarios (username, password, enabled) VALUES ('enrique', '$2a$10$EH/N2v4F13ydK3zM0.6HNu05fW7R7P2rQYfDHohKTCdGN8SpUt9AS', 1);
+INSERT INTO usuarios (username, password, enabled) VALUES ('admin', '$2a$10$ULshhtxKv74TCVZjMRv7XODmGq7b8rHxdQC4T5GmmTTnz4FvTqktW', 1);
+
+/* El prefijo ROLE_ es obligatorio */
+INSERT INTO roles (nombre) VALUES ('ROLE_USER');	
+INSERT INTO roles (nombre) VALUES ('ROLE_ADMIN');
+
+INSERT INTO usuarios_roles (usuario_id, role_id) VALUES (1, 1);
+INSERT INTO usuarios_roles (usuario_id, role_id) VALUES (2, 2);
+INSERT INTO usuarios_roles (usuario_id, role_id) VALUES (2, 1);
 
 
