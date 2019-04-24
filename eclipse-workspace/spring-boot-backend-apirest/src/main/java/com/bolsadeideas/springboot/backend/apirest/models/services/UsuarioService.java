@@ -19,7 +19,7 @@ import com.bolsadeideas.springboot.backend.apirest.models.dao.IUsuarioDao;
 import com.bolsadeideas.springboot.backend.apirest.models.entity.Usuario;
 
 @Service	// Tag "Service" es para registrar la clase con un Bean de Spring
-public class UsuarioService implements UserDetailsService {
+public class UsuarioService implements IUsuarioService, UserDetailsService {
 	
 	private Logger logger = LoggerFactory.getLogger(UsuarioService.class);
 	
@@ -44,6 +44,12 @@ public class UsuarioService implements UserDetailsService {
 				.collect(Collectors.toList());
 		
 		return new User(usuario.getUsername(), usuario.getPassword(), usuario.getEnabled(), true, true, true, authorities);
+	}
+
+	@Override
+	@Transactional(readOnly=true)
+	public Usuario findByUsername(String username) {
+		return usuarioDao.findByUsername(username);
 	}
 
 }
