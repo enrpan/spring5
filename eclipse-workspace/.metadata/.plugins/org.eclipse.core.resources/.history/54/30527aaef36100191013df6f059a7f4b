@@ -1,7 +1,0 @@
-package com.bolsadeideas.springboot.backend.apirest.models.services;
-
-import org.springframework.security.core.userdetails.UserDetailsService;
-
-public class UsuarioService implements UserDetailsService {
-
-}
