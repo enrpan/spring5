@@ -1,8 +1,11 @@
 package com.bolsadeideas.springboot.backend.apirest.models.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -59,12 +63,22 @@ public class Cliente implements Serializable {
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})  // el framework mete estos dos datos automaticamente por usar el LAZY. Esta propiedad es para que no los meta en el JSON al serializar
 	private Region region;
 	
+	// OneToMany --> Un cliente puede tener muchas facturas
+	// mappedBy --> atributo "cliente" dentro de la clase "Factura"
+	// cascade --> borrado en cascada, etc...
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="cliente", cascade=CascadeType.ALL) 
+	private List<Factura> facturas;
+	
 	// El metodo PrePersist es propio de los @Entity y se ejecuta justo antes
 	// de hacer persistente (de guardar) el objeto.
 	//@PrePersist
 	//public void prePersist() {
 	//	createAt = new Date();
 	//}
+	
+	public Cliente() {
+		this.facturas = new ArrayList<>();
+	}
 
 	public Long getId() {
 		return id;
@@ -120,6 +134,14 @@ public class Cliente implements Serializable {
 
 	public void setRegion(Region region) {
 		this.region = region;
+	}
+
+	public List<Factura> getFacturas() {
+		return facturas;
+	}
+
+	public void setFacturas(List<Factura> facturas) {
+		this.facturas = facturas;
 	}
 
 

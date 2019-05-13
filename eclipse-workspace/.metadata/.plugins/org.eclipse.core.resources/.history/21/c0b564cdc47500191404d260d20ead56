@@ -1,0 +1,16 @@
+package com.bolsadeideas.springboot.backend.apirest.models.entity;
+
+import java.io.Serializable;
+
+public class ItemFactura implements Serializable {
+
+	private Long id;
+	private Integer cantidad;
+	
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+}

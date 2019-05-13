@@ -1,0 +1,13 @@
+package com.bolsadeideas.springboot.backend.apirest.models.entity;
+
+import java.util.Date;
+
+public class Factura {
+	
+	private Long id;
+	private String descripcion;
+	private String observacion;
+	private Date createAt;
+	private Cliente cliente;
+
+}
