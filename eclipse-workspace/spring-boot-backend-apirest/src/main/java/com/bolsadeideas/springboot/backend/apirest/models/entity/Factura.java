@@ -20,6 +20,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name="facturas")
 public class Factura implements Serializable {
@@ -36,10 +38,12 @@ public class Factura implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date createAt;
 	
+	@JsonIgnoreProperties({"facturas", "hibernateLazyInitializer", "handler"}) // Para que el JSON no entre en bucle infinito. Para una factura lista su cliente que a su vez tiene relacion con las facturas y las lista, que vuelve a encontrar el cliente y lo vuelve a listar, etc, etc.
 	@ManyToOne(fetch=FetchType.LAZY)   // ManyToOne --> Muchas facturas pueden pertenecer a un cliente
 	@JoinColumn(name="cliente_id")		// Nombre clave foranea. Si no se pone, pone una por defecto (que en este caso coincide, con lo que esta linea se podria quitar)
 	private Cliente cliente;
 	
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})  // el framework mete estos dos datos automaticamente por usar el LAZY. Esta propiedad es para que no los meta en el JSON al serializar
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@JoinColumn(name="factura_id")	// Esta clave foranea es obligatoria pq no tenemos el mappedBy y se creara en facturas_items
 	private List<ItemFactura> items;
@@ -101,6 +105,13 @@ public class Factura implements Serializable {
 		this.items = items;
 	}
 
+	public Double getTotal() {
+		Double total = 0.00;
+		for ( ItemFactura item: items ) {
+			total += item.getImporte();
+		}
+		return total;
+	}
 
 
 	/**
