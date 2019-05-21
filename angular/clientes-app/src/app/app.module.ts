@@ -27,6 +27,11 @@ import { AuthInterceptor } from './usuarios/interceptors/auth.interceptor';
 import { DetalleFacturaComponent } from './facturas/detalle-factura.component';
 import { FacturasComponent } from './facturas/facturas.component';
 
+// Para el Autocompletado. Hay que registrar los modulos también (mas abajo en imports)
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { ReactiveFormsModule } from '@angular/forms';
 
 registerLocaleData(localeES, 'es');
 
@@ -64,7 +69,11 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     BrowserAnimationsModule,
     MatDatepickerModule,
-    MatMomentDateModule
+    MatMomentDateModule,
+    ReactiveFormsModule,
+    MatAutocompleteModule,
+    MatInputModule,
+    MatFormFieldModule
   ],
   providers: [ClienteService,
     {provide: LOCALE_ID, useValue: 'es'},

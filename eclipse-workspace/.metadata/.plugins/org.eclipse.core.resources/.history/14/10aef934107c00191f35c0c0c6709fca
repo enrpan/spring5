@@ -37,8 +37,8 @@ public class FacturaRestController {
 	}
 
 	@GetMapping("/facturas/filtrar-productos/{term}")
-	@ResponseStatus(HttpStatus.OK) 
+	@ResponseStatus(code=HttpStatus.OK) 
 	public List<Producto> filtrarProductos(@PathVariable String term) {
-		return clienteService.findProductoByNombre(term);
+		return clienteService.findProductoByNombre(term)
 	}
 }
