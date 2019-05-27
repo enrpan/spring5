@@ -38,7 +38,7 @@ public class Factura implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date createAt;
 	
-	@JsonIgnoreProperties({"facturas", "hibernateLazyInitializer", "handler"}) // Para que el JSON no entre en bucle infinito. Para una factura lista su cliente que a su vez tiene relacion con las facturas y las lista, que vuelve a encontrar el cliente y lo vuelve a listar, etc, etc.
+	@JsonIgnoreProperties(value={"facturas", "hibernateLazyInitializer", "handler"}, allowSetters=true) // El 'value' es para que el JSON no entre en bucle infinito. Para una factura lista su cliente que a su vez tiene relacion con las facturas y las lista, que vuelve a encontrar el cliente y lo vuelve a listar, etc, etc.
 	@ManyToOne(fetch=FetchType.LAZY)   // ManyToOne --> Muchas facturas pueden pertenecer a un cliente
 	@JoinColumn(name="cliente_id")		// Nombre clave foranea. Si no se pone, pone una por defecto (que en este caso coincide, con lo que esta linea se podria quitar)
 	private Cliente cliente;

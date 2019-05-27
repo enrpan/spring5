@@ -63,7 +63,7 @@ public class Cliente implements Serializable {
 	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})  // el framework mete estos dos datos automaticamente por usar el LAZY. Esta propiedad es para que no los meta en el JSON al serializar
 	private Region region;
 	
-	@JsonIgnoreProperties({"cliente", "hibernateLazyInitializer", "handler"}) // Para que el JSON no entre en bucle infinito. Para un cliente lista sus facturas que a su vez tiene relacion con el cliente y lo lista, que vuelve a encontrar las facturas y las vuelve a listar, etc, etc.
+	@JsonIgnoreProperties(value={"cliente", "hibernateLazyInitializer", "handler"}, allowSetters=true) // El 'value' es para que el JSON no entre en bucle infinito. Para un cliente lista sus facturas que a su vez tiene relacion con el cliente y lo lista, que vuelve a encontrar las facturas y las vuelve a listar, etc, etc.
 	// OneToMany --> Un cliente puede tener muchas facturas
 	// mappedBy --> atributo "cliente" dentro de la clase "Factura"
 	// cascade --> borrado en cascada, etc...

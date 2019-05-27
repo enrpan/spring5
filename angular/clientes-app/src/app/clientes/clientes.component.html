@@ -15,13 +15,12 @@
     <table class="table table-table-bordered table-striped" *ngIf="clientes?.length>0">
       <thead>
         <tr>
-          <!-- <th *ngIf="authService.hasRole('ROLE_USER')">#</th> -->
-          <th>#</th>
+          <th *ngIf="authService.hasRole('ROLE_USER')">#</th>
           <th>nombre</th>
           <th>apellido</th>
           <th>email</th>
           <th>fecha</th>
-          <th>crear factura</th>
+          <th *ngIf="authService.hasRole('ROLE_ADMIN')">crear factura</th>
           <th *ngIf="authService.hasRole('ROLE_ADMIN')">editar</th>
           <th *ngIf="authService.hasRole('ROLE_ADMIN')">eliminar</th>
         </tr>
@@ -30,10 +29,7 @@
         <tr *ngFor="let cliente of clientes">
           <!-- <td><button [routerLink]="['/clientes/ver', cliente.id]" class="btn btn-success btn-sm">{{ cliente.id }}</button></td> Esto es cuando no se mostraba como una pantalla modal -->
           <!-- <td><button type="button" (click)="abrirModal(cliente)" class="btn btn-success btn-sm">{{ cliente.id }}</button></td> Esto era antes de cambiar el boton por la imagen -->
-          <!-- <td *ngIf="authService.hasRole('ROLE_USER')"><img (click)="abrirModal(cliente)" *ngIf="cliente?.foto"
-            src="http://localhost:8080/api/uploads/img/{{cliente.foto}}" alt="{{cliente.foto}}" class="img-thumbnail rounded"
-            style="width:64px; cursor: pointer;"> -->
-          <td><img (click)="abrirModal(cliente)" *ngIf="cliente?.foto"
+          <td *ngIf="authService.hasRole('ROLE_USER')"><img (click)="abrirModal(cliente)" *ngIf="cliente?.foto"
             src="http://localhost:8080/api/uploads/img/{{cliente.foto}}" alt="{{cliente.foto}}" class="img-thumbnail rounded"
             style="width:64px; cursor: pointer;">
             <img (click)="abrirModal(cliente)" *ngIf="!cliente?.foto"
@@ -44,7 +40,7 @@
           <td>{{ cliente.apellido | uppercase }}</td>
           <td>{{ cliente.email }}</td>
           <td>{{ cliente.createAt | date:"EEEE dd, MMMM yyyy" }}</td>
-          <td><button type="button" [routerLink]="['/facturas/form', cliente.id]" class="btn btn-success btn-sm">crear factura</button></td>
+          <td *ngIf="authService.hasRole('ROLE_ADMIN')"><button type="button" [routerLink]="['/facturas/form', cliente.id]" class="btn btn-success btn-sm">crear factura</button></td>
           <td *ngIf="authService.hasRole('ROLE_ADMIN')">
             <button type="button" name="editar" [routerLink]="['/clientes/form', cliente.id]" class="btn btn-primary">editar</button>
           </td>

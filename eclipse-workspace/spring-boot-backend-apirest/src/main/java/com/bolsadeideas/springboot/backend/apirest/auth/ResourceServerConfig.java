@@ -23,8 +23,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	public void configure(HttpSecurity http) throws Exception {
 		// Se asignan los permisos de los roles en las rutas
 		http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/clientes", "/api/clientes/page/**", "/api/uploads/img/**", "/images/**").permitAll()  // El GET a estas rutas puede hacerla cualquiera aunque no esté autenticado. El ** es para indicar cualquier ruta a partir de esa
-		.antMatchers(HttpMethod.GET, "/api/clientes/{id}").permitAll()
-		.antMatchers(HttpMethod.GET, "/api/facturas/**").permitAll()
 		/* Esta parte comentada es para asignar permisos sobre ruta a roles de forma programatica. Esta comentado porque esta hecho con anotaciones Secure en el controlador. 
 		   La parte de las rutas con permitAll siempre hay que ponerla aqui. Y lo mismo la ultima linea por defecto
 		.antMatchers(HttpMethod.GET, "/api/clientes/{id}").hasAnyRole("USER", "ADMIN")  // a esta ruta por GET pueden acceder usuarios y administradores. En el nombre del role no hace falta el "ROLE_". Lo añade automaticamente si no se pone

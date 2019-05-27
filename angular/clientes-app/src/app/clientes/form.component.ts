@@ -53,6 +53,10 @@ export class FormComponent implements OnInit {
 
   update(): void {
     console.log(this.cliente);
+
+    // Al editar un cliente no hay que actualizar sus facturas para no entrar en un bucle infinito (clase 183)
+    this.cliente.facturas = null;
+
     this.clienteService.update(this.cliente).subscribe(
       json => { // en este caso estamos usando el json tal cual lo devuelve el servidor
         this.router.navigate(['/clientes'])
