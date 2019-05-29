@@ -1,0 +1,15 @@
+
+BACKEND
+=======
+Compilar:
+	mvnw.cmd clean package
+
+Ejecutar:
+	java -jar <fichero jar> 
+
+
+FRONTEND
+========
+https://angular.io/guide/deployment
+
+ng build --prod

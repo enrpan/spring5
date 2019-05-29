@@ -11,10 +11,10 @@ import swal from 'sweetalert2'
 })
 export class FormComponent implements OnInit {
 
-  private cliente: Cliente = new Cliente()
+  public cliente: Cliente = new Cliente(); // Hay que ponerlo como public porque se usa en las vistas/plantillas y no solo dentro de la clase
   regiones: Region[];
-  private titulo: string = "Crear Cliente"
-  private errores: string[];
+  public titulo: string = "Crear Cliente"
+  public errores: string[];
 
   constructor(private clienteService: ClienteService,
               private router: Router,

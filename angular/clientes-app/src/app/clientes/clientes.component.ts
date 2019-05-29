@@ -19,8 +19,8 @@ export class ClientesComponent implements OnInit {
   clienteSeleccionado: Cliente;
 
   constructor(private clienteService: ClienteService,
-    private modalService: ModalService,
-    private authService: AuthService,
+    public modalService: ModalService,  // Hay que ponerlo como public porque se usa en las vistas/plantillas y no solo dentro de la clase
+    public authService: AuthService,   // Hay que ponerlo como public porque se usa en las vistas/plantillas y no solo dentro de la clase
     private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {

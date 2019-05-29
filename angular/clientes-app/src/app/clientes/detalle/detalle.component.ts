@@ -22,8 +22,8 @@ export class DetalleComponent implements OnInit {
 
   constructor(private clienteService: ClienteService,
     private facturaService: FacturaService,
-    private authService: AuthService,
-    private modalService: ModalService) { }
+    public authService: AuthService,  // Hay que ponerlo como public porque se usa en las vistas/plantillas y no solo dentro de la clase
+    public modalService: ModalService) { }
     // private activatedRoute: ActivatedRoute) { } Esto solo sera necesario cuando no era una pantalla modal
 
   ngOnInit() {
